@@ -1,4 +1,4 @@
-// routes/courseRoutes.js
+// routes/programCoursesRoutes.js
 const express = require("express");
 const upload = require("../middleware/upload");
 
@@ -10,10 +10,6 @@ const courseController = new CourseController(courseService);
 
 const router = express.Router();
 
-router.post("/", upload.single("image"), courseController.create);
-router.get("/", courseController.getAll);
-router.get("/:id", courseController.getById);
-router.put("/:id", upload.single("image"), courseController.update);
-router.delete("/:id", courseController.delete);
+router.get("/:programId/courses", courseController.getByProgram);
 
 module.exports = router;

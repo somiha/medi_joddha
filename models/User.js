@@ -30,14 +30,18 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       referer: DataTypes.STRING,
+      otp: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      otp_expires_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
     {
       tableName: "users",
       indexes: [
-        {
-          unique: true,
-          fields: ["email"],
-        },
         {
           unique: true,
           fields: ["mobile_number"],

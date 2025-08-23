@@ -1,21 +1,19 @@
-// controllers/courseController.js
-class CourseController {
-  constructor(courseService) {
-    this.courseService = courseService;
+// controllers/subjectController.js
+class SubjectController {
+  constructor(subjectService) {
+    this.subjectService = subjectService;
 
     this.create = this.create.bind(this);
     this.getAll = this.getAll.bind(this);
     this.getById = this.getById.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
-    this.getByProgram = this.getByProgram.bind(this);
   }
 
   async create(req, res) {
     try {
-      const { program_id, name, title, short_des, is_draft, is_published } =
-        req.body;
-      const data = { program_id, name, title, short_des };
+      const { name, title, short_des, is_draft, is_published } = req.body;
+      const data = { name, title, short_des };
 
       if (is_draft !== undefined) data.is_draft = is_draft === "true";
       if (is_published !== undefined)
@@ -26,23 +24,23 @@ class CourseController {
         data.image = `${baseUrl}/uploads/${req.file.filename}`;
       }
 
-      const course = await this.courseService.create(data);
+      const subject = await this.subjectService.create(data);
 
       res.status(201).json({
-        message: "Course created successfully",
-        course,
+        message: "Subject created successfully",
+        subject,
       });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(500).json({ error: error.message });
     }
   }
 
   async getAll(req, res) {
     try {
-      const result = await this.courseService.getAll(req.query);
+      const result = await this.subjectService.getAll(req.query);
 
       res.json({
-        courses: result.rows,
+        subjects: result.rows,
         pagination: {
           currentPage: parseInt(req.query.page) || 1,
           totalPages: Math.ceil(
@@ -64,13 +62,13 @@ class CourseController {
   async getById(req, res) {
     try {
       const { id } = req.params;
-      const course = await this.courseService.getById(id);
+      const subject = await this.subjectService.getById(id);
 
-      if (!course) {
-        return res.status(404).json({ error: "Course not found" });
+      if (!subject) {
+        return res.status(404).json({ error: "Subject not found" });
       }
 
-      res.json({ course });
+      res.json({ subject });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -79,11 +77,9 @@ class CourseController {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const { program_id, name, title, short_des, is_draft, is_published } =
-        req.body;
+      const { name, title, short_des, is_draft, is_published } = req.body;
       const data = {};
 
-      if (program_id) data.program_id = program_id;
       if (name) data.name = name;
       if (title) data.title = title;
       if (short_des) data.short_des = short_des;
@@ -96,11 +92,11 @@ class CourseController {
         data.image = `${baseUrl}/uploads/${req.file.filename}`;
       }
 
-      const course = await this.courseService.update(id, data);
+      const subject = await this.subjectService.update(id, data);
 
       res.json({
-        message: "Course updated successfully",
-        course,
+        message: "Subject updated successfully",
+        subject,
       });
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -110,46 +106,13 @@ class CourseController {
   async delete(req, res) {
     try {
       const { id } = req.params;
-      await this.courseService.delete(id);
+      await this.subjectService.delete(id);
 
-      res.json({ message: "Course deleted successfully" });
+      res.json({ message: "Subject deleted successfully" });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
   }
-  async getByProgram(req, res) {
-    try {
-      const { programId } = req.params;
-      const result = await this.courseService.getCoursesByProgram(
-        programId,
-        req.query
-      );
-
-      if (result.rows.length === 0) {
-        return res
-          .status(404)
-          .json({ error: "No courses found for this program" });
-      }
-
-      res.json({
-        courses: result.rows,
-        pagination: {
-          currentPage: parseInt(req.query.page) || 1,
-          totalPages: Math.ceil(
-            result.count / (parseInt(req.query.limit) || 10)
-          ),
-          totalItems: result.count,
-          hasNext:
-            (parseInt(req.query.page) || 1) *
-              (parseInt(req.query.limit) || 10) <
-            result.count,
-          hasPrev: (parseInt(req.query.page) || 1) > 1,
-        },
-      });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }
 }
 
-module.exports = CourseController;
+module.exports = SubjectController;
