@@ -1,21 +1,30 @@
 // controllers/programController.js
 class ProgramController {
-  static async create(req, res) {
+  constructor(programService) {
+    this.programService = programService;
+
+    this.create = this.create.bind(this);
+    this.getAll = this.getAll.bind(this);
+    this.getById = this.getById.bind(this);
+    this.update = this.update.bind(this);
+    this.delete = this.delete.bind(this);
+  }
+
+  async create(req, res) {
     try {
       const { name, title, short_des, is_draft, is_published } = req.body;
-
       const data = { name, title, short_des };
+
       if (is_draft !== undefined) data.is_draft = is_draft === "true";
       if (is_published !== undefined)
         data.is_published = is_published === "true";
 
       if (req.file) {
-        const baseUrl = process.env.Base_URL || "http://localhost:5001";
+        const baseUrl = process.env.BASE_URL || "http://localhost:5000";
         data.image = `${baseUrl}/uploads/${req.file.filename}`;
       }
 
-      const service = new (require("../services/programService"))();
-      const program = await service.create(data);
+      const program = await this.programService.create(data);
 
       res.status(201).json({
         message: "Program created successfully",
@@ -26,10 +35,9 @@ class ProgramController {
     }
   }
 
-  static async getAll(req, res) {
+  async getAll(req, res) {
     try {
-      const service = new (require("../services/programService"))();
-      const result = await service.getAll(req.query);
+      const result = await this.programService.getAll(req.query);
 
       res.json({
         programs: result.rows,
@@ -51,11 +59,10 @@ class ProgramController {
     }
   }
 
-  static async getById(req, res) {
+  async getById(req, res) {
     try {
       const { id } = req.params;
-      const service = new (require("../services/programService"))();
-      const program = await service.getById(id);
+      const program = await this.programService.getById(id);
 
       if (!program) {
         return res.status(404).json({ error: "Program not found" });
@@ -67,7 +74,7 @@ class ProgramController {
     }
   }
 
-  static async update(req, res) {
+  async update(req, res) {
     try {
       const { id } = req.params;
       const { name, title, short_des, is_draft, is_published } = req.body;
@@ -80,14 +87,12 @@ class ProgramController {
       if (is_published !== undefined)
         data.is_published = is_published === "true";
 
-      // Handle new image
       if (req.file) {
         const baseUrl = process.env.BASE_URL || "http://localhost:5000";
         data.image = `${baseUrl}/uploads/${req.file.filename}`;
       }
 
-      const service = new (require("../services/programService"))();
-      const program = await service.update(id, data);
+      const program = await this.programService.update(id, data);
 
       if (!program) {
         return res.status(404).json({ error: "Program not found" });
@@ -102,19 +107,14 @@ class ProgramController {
     }
   }
 
-  static async delete(req, res) {
+  async delete(req, res) {
     try {
       const { id } = req.params;
-      const service = new (require("../services/programService"))();
-      const program = await service.delete(id);
-
-      if (!program) {
-        return res.status(404).json({ error: "Program not found" });
-      }
+      await this.programService.delete(id);
 
       res.json({ message: "Program deleted successfully" });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(400).json({ error: error.message });
     }
   }
 }

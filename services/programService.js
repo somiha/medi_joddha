@@ -48,7 +48,6 @@ class ProgramService {
 
     if (data.image && program.image) {
       await deleteImage(program.image);
-      k;
     }
 
     return await program.update(data);

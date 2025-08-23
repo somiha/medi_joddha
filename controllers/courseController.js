@@ -3,12 +3,12 @@ class CourseController {
   constructor(courseService) {
     this.courseService = courseService;
 
-    // Bind methods to `this` so they keep context when passed as route handlers
     this.create = this.create.bind(this);
     this.getAll = this.getAll.bind(this);
     this.getById = this.getById.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
+    this.getByProgram = this.getByProgram.bind(this);
   }
 
   async create(req, res) {
@@ -115,6 +115,39 @@ class CourseController {
       res.json({ message: "Course deleted successfully" });
     } catch (error) {
       res.status(400).json({ error: error.message });
+    }
+  }
+  async getByProgram(req, res) {
+    try {
+      const { programId } = req.params;
+      const result = await this.courseService.getCoursesByProgram(
+        programId,
+        req.query
+      );
+
+      if (result.rows.length === 0) {
+        return res
+          .status(404)
+          .json({ error: "No courses found for this program" });
+      }
+
+      res.json({
+        courses: result.rows,
+        pagination: {
+          currentPage: parseInt(req.query.page) || 1,
+          totalPages: Math.ceil(
+            result.count / (parseInt(req.query.limit) || 10)
+          ),
+          totalItems: result.count,
+          hasNext:
+            (parseInt(req.query.page) || 1) *
+              (parseInt(req.query.limit) || 10) <
+            result.count,
+          hasPrev: (parseInt(req.query.page) || 1) > 1,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 }

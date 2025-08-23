@@ -2,11 +2,9 @@
 const express = require("express");
 const upload = require("../middleware/upload");
 
-// Import service
 const CourseService = require("../services/courseService");
 const CourseController = require("../controllers/courseController");
 
-// Create service and controller instances
 const courseService = new CourseService();
 const courseController = new CourseController(courseService);
 

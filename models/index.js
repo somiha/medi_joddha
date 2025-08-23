@@ -6,7 +6,6 @@ const sequelize = require("../config/db");
 const basename = path.basename(__filename);
 const db = {};
 
-// Load all model files
 fs.readdirSync(__dirname)
   .filter((file) => {
     return (
@@ -21,9 +20,8 @@ fs.readdirSync(__dirname)
 
 db.sequelize = sequelize;
 
-// Sync database
 sequelize
-  .sync({ alter: true }) // Auto creates or alters tables
+  .sync({ alter: true })
   .then(() => console.log("Database synced"))
   .catch((err) => console.error("Failed to sync DB:", err));
 
