@@ -1,12 +1,12 @@
-// controllers/schoolCollegeQuestionController.js
-class SchoolCollegeQuestionController {
+// controllers/universityQuestionController.js
+class UniversityQuestionController {
   constructor(service) {
     this.service = service;
 
     this.create = this.create.bind(this);
     this.getAll = this.getAll.bind(this);
     this.getById = this.getById.bind(this);
-    this.getBySchoolCollege = this.getBySchoolCollege.bind(this);
+    this.getByUniversity = this.getByUniversity.bind(this);
     this.getBySubjectAndChapter = this.getBySubjectAndChapter.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
@@ -15,22 +15,22 @@ class SchoolCollegeQuestionController {
 
   async create(req, res) {
     try {
-      const { school_college_id, question_id, year } = req.body;
+      const { university_id, question_id, year } = req.body;
 
-      if (!school_college_id || !question_id || !year) {
-        return res.status(400).json({
-          error: "school_college_id, question_id, and year are required",
-        });
+      if (!university_id || !question_id || !year) {
+        return res
+          .status(400)
+          .json({ error: "university_id, question_id, and year are required" });
       }
 
       const data = await this.service.create({
-        school_college_id,
+        university_id,
         question_id,
         year,
       });
 
       res.status(201).json({
-        message: "School/College question mapping created successfully",
+        message: "University question mapping created successfully",
         data,
       });
     } catch (error) {
@@ -40,10 +40,10 @@ class SchoolCollegeQuestionController {
 
   async createBulk(req, res) {
     try {
-      const { school_college_id, question_id, years } = req.body;
+      const { university_id, question_id, years } = req.body;
 
-      if (!school_college_id) {
-        return res.status(400).json({ error: "school_college_id is required" });
+      if (!university_id) {
+        return res.status(400).json({ error: "university_id is required" });
       }
 
       if (!question_id || !Array.isArray(question_id)) {
@@ -57,13 +57,13 @@ class SchoolCollegeQuestionController {
       }
 
       const records = await this.service.createBulk({
-        school_college_id,
+        university_id,
         question_id,
         years,
       });
 
       res.status(201).json({
-        message: "Bulk school-college-question mappings created successfully",
+        message: "Bulk university-question mappings created successfully",
         count: records.length,
         data: records,
       });
@@ -92,14 +92,14 @@ class SchoolCollegeQuestionController {
     }
   }
 
-  async getBySchoolCollege(req, res) {
+  async getByUniversity(req, res) {
     try {
-      const { schoolCollegeId } = req.params;
-      const data = await this.service.getBySchoolCollegeId(schoolCollegeId);
+      const { universityId } = req.params;
+      const data = await this.service.getByUniversityId(universityId);
       if (data.length === 0) {
         return res
           .status(404)
-          .json({ error: "No questions found for this school/college" });
+          .json({ error: "No questions found for this university" });
       }
       res.json({ data });
     } catch (error) {
@@ -116,8 +116,7 @@ class SchoolCollegeQuestionController {
       );
       if (data.length === 0) {
         return res.status(404).json({
-          error:
-            "No school-college questions found for this subject and chapter",
+          error: "No university questions found for this subject and chapter",
         });
       }
       res.json({ data });
@@ -129,10 +128,10 @@ class SchoolCollegeQuestionController {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const { school_college_id, question_id, year } = req.body;
+      const { university_id, question_id, year } = req.body;
 
       const data = await this.service.update(id, {
-        school_college_id,
+        university_id,
         question_id,
         year,
       });
@@ -157,4 +156,4 @@ class SchoolCollegeQuestionController {
   }
 }
 
-module.exports = SchoolCollegeQuestionController;
+module.exports = UniversityQuestionController;

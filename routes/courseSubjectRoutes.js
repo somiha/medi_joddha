@@ -8,11 +8,12 @@ const service = new CourseSubjectService();
 const controller = new CourseSubjectController(service);
 
 const router = express.Router();
+const auth = require("../middleware/auth");
 
-router.post("/", controller.add);
-router.get("/", controller.getAll);
-router.get("/course/:courseId", controller.getByCourse);
-router.get("/subject/:subjectId", controller.getBySubject);
-router.delete("/", controller.remove);
+router.post("/", auth, controller.add);
+router.get("/", auth, controller.getAll);
+router.get("/course/:courseId", auth, controller.getByCourse);
+router.get("/subject/:subjectId", auth, controller.getBySubject);
+router.delete("/", auth, controller.remove);
 
 module.exports = router;

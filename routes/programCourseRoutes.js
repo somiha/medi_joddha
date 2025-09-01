@@ -9,6 +9,7 @@ const courseService = new CourseService();
 const courseController = new CourseController(courseService);
 
 const router = express.Router();
+const auth = require("../middleware/auth");
 
 router.get("/:programId/courses", courseController.getByProgram);
 

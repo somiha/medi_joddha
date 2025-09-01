@@ -9,6 +9,7 @@ const courseService = new CourseService();
 const courseController = new CourseController(courseService);
 
 const router = express.Router();
+const auth = require("../middleware/auth");
 
 router.post("/", upload.single("image"), courseController.create);
 router.get("/", courseController.getAll);

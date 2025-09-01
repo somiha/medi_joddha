@@ -10,6 +10,7 @@ class BoardQuestionController {
     this.getBySubjectAndChapter = this.getBySubjectAndChapter.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
+    this.createBulk = this.createBulk.bind(this);
   }
 
   async create(req, res) {
@@ -29,6 +30,43 @@ class BoardQuestionController {
         data,
       });
     } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  // controllers/boardQuestionController.js
+  async createBulk(req, res) {
+    try {
+      const { board_id, question_id, years } = req.body;
+
+      // Validation
+      if (!board_id) {
+        return res.status(400).json({ error: "board_id is required" });
+      }
+
+      if (!question_id || !Array.isArray(question_id)) {
+        return res
+          .status(400)
+          .json({ error: "question_id must be a non-empty array" });
+      }
+
+      if (!years) {
+        return res.status(400).json({ error: "years is required" });
+      }
+
+      const records = await this.service.createBulk({
+        board_id,
+        question_id,
+        years,
+      });
+
+      res.status(201).json({
+        message: "Bulk board-question mappings created successfully",
+        count: records.length,
+        data: records,
+      });
+    } catch (error) {
+      console.error(error);
       res.status(400).json({ error: error.message });
     }
   }

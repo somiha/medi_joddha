@@ -1,11 +1,11 @@
-// routes/schoolCollegeQuestionRoutes.js
+// routes/universityQuestionRoutes.js
 const express = require("express");
 
-const SchoolCollegeQuestionService = require("../services/schoolCollegeQuestionService");
-const SchoolCollegeQuestionController = require("../controllers/schoolCollegeQuestionController");
+const UniversityQuestionService = require("../services/universityQuestionService");
+const UniversityQuestionController = require("../controllers/universityQuestionController");
 
-const service = new SchoolCollegeQuestionService();
-const controller = new SchoolCollegeQuestionController(service);
+const service = new UniversityQuestionService();
+const controller = new UniversityQuestionController(service);
 
 const router = express.Router();
 const auth = require("../middleware/auth");
@@ -13,7 +13,7 @@ const auth = require("../middleware/auth");
 router.post("/", auth, controller.create);
 router.get("/", auth, controller.getAll);
 router.get("/:id", auth, controller.getById);
-router.get("/school/:schoolCollegeId", auth, controller.getBySchoolCollege);
+router.get("/university/:universityId", auth, controller.getByUniversity);
 router.get(
   "/subject/:subjectId/chapter/:chapterId",
   controller.getBySubjectAndChapter

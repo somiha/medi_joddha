@@ -13,7 +13,15 @@ class AuthController {
     try {
       const userData = req.body;
       const user = await this.authService.register(userData);
-      const token = generateToken(user.id);
+      const userInfo = {
+        type: "student",
+        id: user.id,
+        full_name: user.full_name,
+        email: user.email,
+        mobile_number: user.mobile_number,
+      };
+      const token = generateToken(userInfo);
+      console.log(token);
 
       res.status(201).json({
         message: "User registered successfully",
@@ -32,8 +40,17 @@ class AuthController {
   async login(req, res) {
     try {
       const { mobile_number, password } = req.body;
+      console.log(mobile_number, password);
       const user = await this.authService.login(mobile_number, password);
-      const token = generateToken(user.id);
+      const userInfo = {
+        type: "student",
+        id: user.id,
+        full_name: user.full_name,
+        email: user.email,
+        mobile_number: user.mobile_number,
+      };
+      const token = generateToken(userInfo);
+      console.log(token);
 
       res.json({
         message: "Login successful",

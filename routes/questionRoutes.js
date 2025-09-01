@@ -9,6 +9,7 @@ const questionService = new QuestionService();
 const questionController = new QuestionController(questionService);
 
 const router = express.Router();
+const auth = require("../middleware/auth");
 
 router.post("/", upload.single("image"), questionController.create);
 router.get("/", questionController.getAll);

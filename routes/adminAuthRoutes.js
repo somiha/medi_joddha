@@ -1,12 +1,12 @@
-// routes/authRoutes.js
+// routes/adminAuthRoutes.js
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 
-const AuthService = require("../services/authService");
-const AuthController = require("../controllers/authController");
+const AdminAuthService = require("../services/adminAuthService");
+const AdminAuthController = require("../controllers/adminAuthController");
 
-const authService = new AuthService();
-const authController = new AuthController(authService);
+const authService = new AdminAuthService();
+const authController = new AdminAuthController(authService);
 
 const router = express.Router();
 const auth = require("../middleware/auth");
@@ -20,11 +20,13 @@ const validate = (req, res, next) => {
 };
 
 router.post(
-  "/signup",
+  "/register",
   [
     body("full_name").notEmpty().withMessage("Full name is required"),
-    // body("email").isEmail().withMessage("Email is invalid"),
-    body("mobile_number").notEmpty().withMessage("Mobile number is required"),
+    body("mobile_number")
+      .optional()
+      .notEmpty()
+      .withMessage("Mobile number is required if provided"),
     body("password")
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters"),
@@ -36,19 +38,15 @@ router.post(
 router.post(
   "/login",
   [
-    body("mobile_number")
-      .notEmpty()
-      .withMessage("Mobile number is required")
-      .isLength({ min: 10, max: 15 })
-      .withMessage("Mobile number must be 10-15 digits"),
+    body("mobile_number").notEmpty().withMessage("Mobile number is required"),
     body("password").exists().withMessage("Password is required"),
   ],
   validate,
   authController.login
 );
 
-router.post("/forgot/otp", AuthController.forgotPasswordSendOtp);
-router.post("/forgot/verify", AuthController.forgotPasswordVerifyOtp);
-router.post("/reset", AuthController.resetPassword);
+router.post("/forgot/otp", AdminAuthController.forgotPasswordSendOtp);
+router.post("/forgot/verify", AdminAuthController.forgotPasswordVerifyOtp);
+router.post("/reset", AdminAuthController.resetPassword);
 
 module.exports = router;

@@ -1,29 +1,29 @@
-// services/boardQuestionService.js
-const BoardQuestionRepository = require("../repositories/boardQuestionRepository");
+// services/universityQuestionService.js
+const UniversityQuestionRepository = require("../repositories/universityQuestionRepository");
 const db = require("../models");
 
-class BoardQuestionService {
+class UniversityQuestionService {
   constructor() {
-    this.repo = new BoardQuestionRepository(db.BoardQuestion);
+    this.repo = new UniversityQuestionRepository(db.UniversityQuestion);
   }
 
   async create(data) {
-    const { board_id, question_id, year } = data;
+    const { university_id, question_id, year } = data;
 
-    const board = await db.Board.findByPk(board_id);
-    if (!board) throw new Error("Board not found");
+    const university = await db.University.findByPk(university_id);
+    if (!university) throw new Error("University not found");
 
     const question = await db.Question.findByPk(question_id);
     if (!question) throw new Error("Question not found");
 
-    return await this.repo.create({ board_id, question_id, year });
+    return await this.repo.create({ university_id, question_id, year });
   }
 
   async createBulk(data) {
-    const { board_id, question_id, years } = data;
+    const { university_id, question_id, years } = data;
 
-    const board = await db.Board.findByPk(board_id);
-    if (!board) throw new Error("Board not found");
+    const university = await db.University.findByPk(university_id);
+    if (!university) throw new Error("University not found");
 
     const yearArray = Array.isArray(years) ? years : [years];
 
@@ -52,11 +52,11 @@ class BoardQuestionService {
         const question = await db.Question.findByPk(qId);
         if (!question) throw new Error(`Question not found: ID ${qId}`);
 
-        const exists = await this.repo.exists(board_id, qId, year);
+        const exists = await this.repo.exists(university_id, qId, year);
         if (exists) continue;
 
         const record = await this.repo.create({
-          board_id,
+          university_id,
           question_id: qId,
           year,
         });
@@ -78,8 +78,8 @@ class BoardQuestionService {
     return record;
   }
 
-  async getByBoardId(boardId) {
-    return await this.repo.findByBoardId(boardId);
+  async getByUniversityId(universityId) {
+    return await this.repo.findByUniversityId(universityId);
   }
 
   async getBySubjectAndChapter(subjectId, chapterId) {
@@ -87,11 +87,11 @@ class BoardQuestionService {
   }
 
   async update(id, data) {
-    const { board_id, question_id, year } = data;
+    const { university_id, question_id, year } = data;
 
-    if (board_id) {
-      const board = await db.Board.findByPk(board_id);
-      if (!board) throw new Error("Board not found");
+    if (university_id) {
+      const university = await db.University.findByPk(university_id);
+      if (!university) throw new Error("University not found");
     }
 
     if (question_id) {
@@ -99,7 +99,11 @@ class BoardQuestionService {
       if (!question) throw new Error("Question not found");
     }
 
-    const record = await this.repo.update(id, { board_id, question_id, year });
+    const record = await this.repo.update(id, {
+      university_id,
+      question_id,
+      year,
+    });
     if (!record) throw new Error("Record not found");
     return record;
   }
@@ -111,4 +115,4 @@ class BoardQuestionService {
   }
 }
 
-module.exports = BoardQuestionService;
+module.exports = UniversityQuestionService;

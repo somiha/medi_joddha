@@ -1,7 +1,7 @@
 // app.js
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
 
 const authRoutes = require("./routes/authRoutes");
 const programRoutes = require("./routes/programRoutes");
@@ -15,8 +15,16 @@ const boardRoutes = require("./routes/boardRoutes");
 const boardQuestionRoutes = require("./routes/boardQuestionRoutes");
 const schoolCollegeRoutes = require("./routes/schoolCollegeRoutes");
 const schoolCollegeQuestionRoutes = require("./routes/schoolCollegeQuestionRoutes");
+const universityRoutes = require("./routes/universityRoutes");
+const universityQuestionRoutes = require("./routes/universityQuestionRoutes");
 
 const programCoursesRoutes = require("./routes/programCourseRoutes");
+const modelTestRoutes = require("./routes/modelTestRoutes");
+const modelTestQuestionRoutes = require("./routes/modelTestQuestionRoutes");
+const courseModelTestRoutes = require("./routes/courseModelTestRoutes");
+const testTypeRoutes = require("./routes/testTypeRoutes");
+
+const adminAuthRoutes = require("./routes/adminAuthRoutes");
 
 const app = express();
 
@@ -35,8 +43,16 @@ app.use("/api/boards", boardRoutes);
 app.use("/api/board-questions", boardQuestionRoutes);
 app.use("/api/school-colleges", schoolCollegeRoutes);
 app.use("/api/school-college-questions", schoolCollegeQuestionRoutes);
+app.use("/api/universities", universityRoutes);
+app.use("/api/university-questions", universityQuestionRoutes);
+app.use("/api/model-tests", modelTestRoutes);
+app.use("/api/model-tests", modelTestQuestionRoutes);
+app.use("/api/test-types", testTypeRoutes);
 
 app.use("/api/programs", programCoursesRoutes);
+app.use("/api/course-model-tests", courseModelTestRoutes);
+
+app.use("/api/admin/auth", adminAuthRoutes);
 
 app.use("/uploads", express.static("uploads"));
 

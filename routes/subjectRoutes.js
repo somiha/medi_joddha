@@ -9,6 +9,7 @@ const subjectService = new SubjectService();
 const subjectController = new SubjectController(subjectService);
 
 const router = express.Router();
+const auth = require("../middleware/auth");
 
 router.post("/", upload.single("image"), subjectController.create);
 router.get("/", subjectController.getAll);

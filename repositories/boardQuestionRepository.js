@@ -12,6 +12,12 @@ class BoardQuestionRepository {
     return await this.model.create(data);
   }
 
+  async exists(board_id, question_id, year) {
+    return await this.model.findOne({
+      where: { board_id, question_id, year },
+    });
+  }
+
   async findAll() {
     const query = `
         SELECT 

@@ -19,6 +19,54 @@ class SchoolCollegeQuestionService {
     return await this.repo.create({ school_college_id, question_id, year });
   }
 
+  async createBulk(data) {
+    const { school_college_id, question_id, years } = data;
+
+    const board = await db.Board.findByPk(school_college_id);
+    if (!board) throw new Error("Board not found");
+
+    const yearArray = Array.isArray(years) ? years : [years];
+    const isMatrix = Array.isArray(question_id[0]);
+    const questionGroups = isMatrix
+      ? question_id
+      : yearArray.map(() => question_id);
+
+    if (questionGroups.length !== yearArray.length) {
+      throw new Error(
+        `Expected ${yearArray.length} question groups, but got ${questionGroups.length}`
+      );
+    }
+
+    const records = [];
+
+    for (let i = 0; i < yearArray.length; i++) {
+      const year = yearArray[i];
+      const qIds = questionGroups[i];
+
+      if (!Array.isArray(qIds)) {
+        throw new Error(`Question group for year ${year} must be an array`);
+      }
+
+      for (const qId of qIds) {
+        const question = await db.Question.findByPk(qId);
+        if (!question) throw new Error(`Question not found: ID ${qId}`);
+
+        const exists = await this.repo.exists(school_college_id, qId, year);
+        if (exists) continue;
+
+        const record = await this.repo.create({
+          school_college_id,
+          question_id: qId,
+          year,
+        });
+
+        records.push(record);
+      }
+    }
+
+    return records;
+  }
+
   async getAll() {
     return await this.repo.findAll();
   }

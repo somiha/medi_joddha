@@ -8,10 +8,11 @@ const service = new SchoolCollegeService();
 const controller = new SchoolCollegeController(service);
 
 const router = express.Router();
+const auth = require("../middleware/auth");
 
-router.post("/", controller.create);
-router.get("/", controller.getAll);
-router.get("/:id", controller.getById);
-router.delete("/:id", controller.delete);
+router.post("/", auth, controller.create);
+router.get("/", auth, controller.getAll);
+router.get("/:id", auth, controller.getById);
+router.delete("/:id", auth, controller.delete);
 
 module.exports = router;
