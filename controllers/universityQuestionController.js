@@ -1,0 +1,159 @@
+// controllers/universityQuestionController.js
+class UniversityQuestionController {
+  constructor(service) {
+    this.service = service;
+
+    this.create = this.create.bind(this);
+    this.getAll = this.getAll.bind(this);
+    this.getById = this.getById.bind(this);
+    this.getByUniversity = this.getByUniversity.bind(this);
+    this.getBySubjectAndChapter = this.getBySubjectAndChapter.bind(this);
+    this.update = this.update.bind(this);
+    this.delete = this.delete.bind(this);
+    this.createBulk = this.createBulk.bind(this);
+  }
+
+  async create(req, res) {
+    try {
+      const { university_id, question_id, year } = req.body;
+
+      if (!university_id || !question_id || !year) {
+        return res
+          .status(400)
+          .json({ error: "university_id, question_id, and year are required" });
+      }
+
+      const data = await this.service.create({
+        university_id,
+        question_id,
+        year,
+      });
+
+      res.status(201).json({
+        message: "University question mapping created successfully",
+        data,
+      });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  async createBulk(req, res) {
+    try {
+      const { university_id, question_id, years } = req.body;
+
+      if (!university_id) {
+        return res.status(400).json({ error: "university_id is required" });
+      }
+
+      if (!question_id || !Array.isArray(question_id)) {
+        return res
+          .status(400)
+          .json({ error: "question_id must be a non-empty array" });
+      }
+
+      if (!years) {
+        return res.status(400).json({ error: "years is required" });
+      }
+
+      const records = await this.service.createBulk({
+        university_id,
+        question_id,
+        years,
+      });
+
+      res.status(201).json({
+        message: "Bulk university-question mappings created successfully",
+        count: records.length,
+        data: records,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  async getAll(req, res) {
+    try {
+      const data = await this.service.getAll();
+      res.json({ data });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getById(req, res) {
+    try {
+      const { id } = req.params;
+      const data = await this.service.getById(id);
+      res.json({ data });
+    } catch (error) {
+      res.status(404).json({ error: error.message });
+    }
+  }
+
+  async getByUniversity(req, res) {
+    try {
+      const { universityId } = req.params;
+      const data = await this.service.getByUniversityId(universityId);
+      if (data.length === 0) {
+        return res
+          .status(404)
+          .json({ error: "No questions found for this university" });
+      }
+      res.json({ data });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getBySubjectAndChapter(req, res) {
+    try {
+      const { subjectId, chapterId } = req.params;
+      const data = await this.service.getBySubjectAndChapter(
+        subjectId,
+        chapterId
+      );
+      if (data.length === 0) {
+        return res.status(404).json({
+          error: "No university questions found for this subject and chapter",
+        });
+      }
+      res.json({ data });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async update(req, res) {
+    try {
+      const { id } = req.params;
+      const { university_id, question_id, year } = req.body;
+
+      const data = await this.service.update(id, {
+        university_id,
+        question_id,
+        year,
+      });
+
+      res.json({
+        message: "Mapping updated successfully",
+        data,
+      });
+    } catch (error) {
+      res.status(404).json({ error: error.message });
+    }
+  }
+
+  async delete(req, res) {
+    try {
+      const { id } = req.params;
+      await this.service.delete(id);
+      res.json({ message: "Mapping deleted successfully" });
+    } catch (error) {
+      res.status(404).json({ error: error.message });
+    }
+  }
+}
+
+module.exports = UniversityQuestionController;

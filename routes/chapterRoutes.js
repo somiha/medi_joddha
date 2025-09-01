@@ -9,6 +9,7 @@ const chapterService = new ChapterService();
 const chapterController = new ChapterController(chapterService);
 
 const router = express.Router();
+const auth = require("../middleware/auth");
 
 router.post("/", upload.single("image"), chapterController.create);
 router.get("/", chapterController.getAll);

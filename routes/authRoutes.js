@@ -9,6 +9,7 @@ const authService = new AuthService();
 const authController = new AuthController(authService);
 
 const router = express.Router();
+const auth = require("../middleware/auth");
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
@@ -35,7 +36,11 @@ router.post(
 router.post(
   "/login",
   [
-    body("mobile_number").notEmpty().withMessage("Mobile number is required"),
+    body("mobile_number")
+      .notEmpty()
+      .withMessage("Mobile number is required")
+      .isLength({ min: 10, max: 15 })
+      .withMessage("Mobile number must be 10-15 digits"),
     body("password").exists().withMessage("Password is required"),
   ],
   validate,

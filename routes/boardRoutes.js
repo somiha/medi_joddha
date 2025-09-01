@@ -8,6 +8,7 @@ const boardService = new BoardService();
 const boardController = new BoardController(boardService);
 
 const router = express.Router();
+const auth = require("../middleware/auth");
 
 router.post("/", boardController.create);
 router.get("/", boardController.getAll);

@@ -42,6 +42,12 @@ class QuestionRepository {
       order: [["id", "DESC"]],
     });
   }
+
+  async findByIds(ids) {
+    return await this.model.findAll({
+      where: { id: ids },
+    });
+  }
 }
 
 module.exports = QuestionRepository;

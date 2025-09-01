@@ -8,16 +8,19 @@ const service = new SchoolCollegeQuestionService();
 const controller = new SchoolCollegeQuestionController(service);
 
 const router = express.Router();
+const auth = require("../middleware/auth");
 
-router.post("/", controller.create);
-router.get("/", controller.getAll);
-router.get("/:id", controller.getById);
-router.get("/school/:schoolCollegeId", controller.getBySchoolCollege);
+router.post("/", auth, controller.create);
+router.get("/", auth, controller.getAll);
+router.get("/:id", auth, controller.getById);
+router.get("/school/:schoolCollegeId", auth, controller.getBySchoolCollege);
 router.get(
   "/subject/:subjectId/chapter/:chapterId",
   controller.getBySubjectAndChapter
 );
-router.put("/:id", controller.update);
-router.delete("/:id", controller.delete);
+router.put("/:id", auth, controller.update);
+router.delete("/:id", auth, controller.delete);
+
+router.post("/bulk", auth, controller.createBulk);
 
 module.exports = router;

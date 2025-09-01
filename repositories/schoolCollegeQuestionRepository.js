@@ -12,6 +12,12 @@ class SchoolCollegeQuestionRepository {
     return await this.model.create(data);
   }
 
+  async exists(school_college_id, question_id, year) {
+    return await this.model.findOne({
+      where: { school_college_id, question_id, year },
+    });
+  }
+
   async findAll() {
     const query = `
         SELECT 
