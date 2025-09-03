@@ -24,6 +24,10 @@ const modelTestQuestionRoutes = require("./routes/modelTestQuestionRoutes");
 const courseModelTestRoutes = require("./routes/courseModelTestRoutes");
 const testTypeRoutes = require("./routes/testTypeRoutes");
 
+const doubtClearQuestionRoutes = require("./routes/doubtClearQuestionRoutes");
+const premiumProgramUserRoutes = require("./routes/premiumProgramUserRoutes");
+const doubtClearAnswerRoutes = require("./routes/doubtClearQuestionAnswerRoutes");
+
 const adminAuthRoutes = require("./routes/adminAuthRoutes");
 
 const app = express();
@@ -51,6 +55,10 @@ app.use("/api/test-types", testTypeRoutes);
 
 app.use("/api/programs", programCoursesRoutes);
 app.use("/api/course-model-tests", courseModelTestRoutes);
+
+app.use("/api/doubt-clear-questions", doubtClearQuestionRoutes);
+app.use("/api/premium-program-users", premiumProgramUserRoutes);
+app.use("/api/doubt-clear-answers", doubtClearAnswerRoutes);
 
 app.use("/api/admin/auth", adminAuthRoutes);
 
