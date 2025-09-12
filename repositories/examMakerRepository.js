@@ -1,5 +1,5 @@
-// repositories/doubtClearQuestionAnswerRepository.js
-class DoubtClearQuestionAnswerRepository {
+// repositories/examMakerRepository.js
+class ExamMakerRepository {
   constructor(model) {
     this.model = model;
   }
@@ -8,24 +8,19 @@ class DoubtClearQuestionAnswerRepository {
     return await this.model.create(data);
   }
 
-  async findAll(where = {}, offset = 0, limit = 10) {
-    return await this.model.findAndCountAll({
-      where,
-      offset,
-      limit,
-      order: [["created_at", "DESC"]],
-    });
-  }
-
   async findById(id) {
     return await this.model.findByPk(id);
   }
 
-  async findByQuestionId(questionId) {
+  async findByUserId(user_id) {
     return await this.model.findAll({
-      where: { doubtClearQuestionId: questionId },
-      order: [["created_at", "ASC"]],
+      where: { user_id },
+      order: [["created_at", "DESC"]],
     });
+  }
+
+  async findAll(where = {}) {
+    return await this.model.findAll({ where, order: [["created_at", "DESC"]] });
   }
 
   async update(id, data) {
@@ -42,4 +37,4 @@ class DoubtClearQuestionAnswerRepository {
   }
 }
 
-module.exports = DoubtClearQuestionAnswerRepository;
+module.exports = ExamMakerRepository;

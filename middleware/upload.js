@@ -1,38 +1,56 @@
 // middleware/upload.js
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
 const uploadDir = "./uploads";
-const fs = require("fs");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadDir);
+    const folder = req.body?.uploadFolder || "general";
+    const sanitizedFolder = folder.replace(/[^a-zA-Z0-9]/g, "_");
+    const destPath = path.join(uploadDir, sanitizedFolder);
+    if (!fs.existsSync(destPath)) {
+      fs.mkdirSync(destPath, { recursive: true });
+    }
+    cb(null, destPath);
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, "program-" + uniqueSuffix + path.extname(file.originalname));
+    const prefix = req.body?.uploadFolder || "general";
+    const cleanPrefix = prefix.replace(/[^a-zA-Z0-9]/g, "-");
+    cb(
+      null,
+      `${cleanPrefix}-${uniqueSuffix}${path.extname(file.originalname)}`
+    );
   },
 });
 
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = /jpeg|jpg|png|webp/i;
+  const extname = allowedTypes.test(
+    path.extname(file.originalname).toLowerCase()
+  );
+  const mimetype = allowedTypes.test(file.mimetype);
+  if (mimetype && extname) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only images (jpeg, jpg, png, webp) are allowed"));
+  }
+};
+
 const upload = multer({
-  storage: storage,
+  storage,
   limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|webp/;
-    const extname = allowedTypes.test(
-      path.extname(file.originalname).toLowerCase()
-    );
-    const mimetype = allowedTypes.test(file.mimetype);
-    if (mimetype && extname) {
-      return cb(null, true);
-    } else {
-      cb(new Error("Only images (jpeg, jpg, png, webp) are allowed"));
-    }
-  },
+  fileFilter,
 });
 
 module.exports = upload;
+
+upload.multiUpload = upload.fields([
+  { name: "image", maxCount: 1 },
+  { name: "photos", maxCount: 10 },
+]);

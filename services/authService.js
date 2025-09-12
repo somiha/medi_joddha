@@ -41,7 +41,6 @@ class AuthService {
       throw new Error("No user found with this mobile number");
     }
 
-    // const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otp = "123456";
     const otp_expires_at = new Date(Date.now() + 5 * 60 * 1000);
     await user.update({ otp, otp_expires_at });
@@ -79,6 +78,14 @@ class AuthService {
     await user.update({ password: hashed });
 
     return { message: "Password reset successfully" };
+  }
+
+  async getUserProfile(user_id) {
+    const user = await this.userRepository.findById(user_id);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return user;
   }
 }
 

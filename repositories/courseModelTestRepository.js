@@ -19,14 +19,14 @@ class CourseModelTestRepository {
   async findByCourseId(courseId) {
     return await this.model.findAll({
       where: { course_id: courseId },
-      order: [["createdAt", "DESC"]],
+      order: [["created_at", "DESC"]],
     });
   }
 
   async findByModelTestId(modelTestId) {
     return await this.model.findAll({
       where: { model_test_id: modelTestId },
-      order: [["createdAt", "DESC"]],
+      order: [["created_at", "DESC"]],
     });
   }
 

@@ -27,6 +27,12 @@ const testTypeRoutes = require("./routes/testTypeRoutes");
 const doubtClearQuestionRoutes = require("./routes/doubtClearQuestionRoutes");
 const premiumProgramUserRoutes = require("./routes/premiumProgramUserRoutes");
 const doubtClearAnswerRoutes = require("./routes/doubtClearQuestionAnswerRoutes");
+const liveTestResultRoutes = require("./routes/liveTestResultRoutes");
+
+const examMakerRoutes = require("./routes/examMakerRoutes");
+const admissionProcessRoutes = require("./routes/admissionProcessRoutes");
+const admissionNoticeRoutes = require("./routes/admissionNoticeRoutes");
+const medicalCollegeRoutes = require("./routes/medicalCollegeRoutes");
 
 const adminAuthRoutes = require("./routes/adminAuthRoutes");
 
@@ -59,6 +65,12 @@ app.use("/api/course-model-tests", courseModelTestRoutes);
 app.use("/api/doubt-clear-questions", doubtClearQuestionRoutes);
 app.use("/api/premium-program-users", premiumProgramUserRoutes);
 app.use("/api/doubt-clear-answers", doubtClearAnswerRoutes);
+
+app.use("/api/live-test-results", liveTestResultRoutes);
+app.use("/api/exam-maker", examMakerRoutes);
+app.use("/api/admission-processes", admissionProcessRoutes);
+app.use("/api/admission-notices", admissionNoticeRoutes);
+app.use("/api/medical-colleges", medicalCollegeRoutes);
 
 app.use("/api/admin/auth", adminAuthRoutes);
 

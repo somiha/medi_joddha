@@ -19,8 +19,6 @@ class DoubtClearQuestionAnswerService {
     if (!doubtClearQuestionId || !answer) {
       throw new Error("Question ID and answer are required");
     }
-
-    // Validate question exists
     const question = await db.DoubtClearQuestion.findByPk(doubtClearQuestionId);
     if (!question) throw new Error("Doubt clear question not found");
 

@@ -7,6 +7,7 @@ class AuthController {
 
     this.register = this.register.bind(this);
     this.login = this.login.bind(this);
+    this.getUserProfile = this.getUserProfile.bind(this);
   }
 
   async register(req, res) {
@@ -64,6 +65,23 @@ class AuthController {
       });
     } catch (error) {
       res.status(401).json({ error: error.message });
+    }
+  }
+
+  async getUserProfile(req, res) {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const user = await this.authService.getUserProfile(userId);
+
+      res.json({
+        user,
+      });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
   }
   static async forgotPasswordSendOtp(req, res) {

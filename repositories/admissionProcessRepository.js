@@ -1,5 +1,5 @@
-// repositories/doubtClearQuestionAnswerRepository.js
-class DoubtClearQuestionAnswerRepository {
+// repositories/admissionProcessRepository.js
+class AdmissionProcessRepository {
   constructor(model) {
     this.model = model;
   }
@@ -8,24 +8,16 @@ class DoubtClearQuestionAnswerRepository {
     return await this.model.create(data);
   }
 
-  async findAll(where = {}, offset = 0, limit = 10) {
+  async findAll(offset = 0, limit = 10) {
     return await this.model.findAndCountAll({
-      where,
       offset,
       limit,
-      order: [["created_at", "DESC"]],
+      order: [["id", "DESC"]],
     });
   }
 
   async findById(id) {
     return await this.model.findByPk(id);
-  }
-
-  async findByQuestionId(questionId) {
-    return await this.model.findAll({
-      where: { doubtClearQuestionId: questionId },
-      order: [["created_at", "ASC"]],
-    });
   }
 
   async update(id, data) {
@@ -42,4 +34,4 @@ class DoubtClearQuestionAnswerRepository {
   }
 }
 
-module.exports = DoubtClearQuestionAnswerRepository;
+module.exports = AdmissionProcessRepository;

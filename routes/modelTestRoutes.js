@@ -16,7 +16,7 @@ const auth = require("../middleware/auth");
 router.post("/", auth, controller.create);
 router.get("/", auth, controller.getAll);
 router.get("/:id", auth, controller.getById);
-router.get("/:id/details", auth, controller.getByIdWithTypeName); // ← New
+router.get("/:id/details", auth, controller.getByIdWithTypeName);
 router.put("/:id", auth, controller.update);
 router.delete("/:id", auth, controller.delete);
 

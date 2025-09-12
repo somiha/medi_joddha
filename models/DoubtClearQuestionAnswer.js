@@ -35,14 +35,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: "doubt_clear_question_answers",
       timestamps: true,
-      underscored: true, // uses snake_case for fields
+      underscored: true,
     }
   );
-
-  // Optional: Define associations later
-  // DoubtClearQuestionAnswer.associate = (models) => {
-  //   models.DoubtClearQuestionAnswer.belongsTo(models.DoubtClearQuestion, { foreignKey: 'doubt_clear_question_id' });
-  // };
 
   return DoubtClearQuestionAnswer;
 };

@@ -8,13 +8,14 @@ const DoubtClearQuestionAnswerController = require("../controllers/doubtClearQue
 const service = new DoubtClearQuestionAnswerService();
 const controller = new DoubtClearQuestionAnswerController(service);
 
+const auth = require("../middleware/auth");
+
 const router = express.Router();
 
-// Upload middleware for image
-router.post("/", upload.single("image"), controller.add);
-router.get("/", controller.getAll);
-router.get("/question/:questionId", controller.getByQuestion);
-router.put("/:id", upload.single("image"), controller.update);
-router.delete("/:id", controller.delete);
+router.post("/", auth, upload.single("image"), controller.add);
+router.get("/", auth, controller.getAll);
+router.get("/question/:questionId", auth, controller.getByQuestion);
+router.put("/:id", auth, upload.single("image"), controller.update);
+router.delete("/:id", auth, controller.delete);
 
 module.exports = router;
