@@ -7,7 +7,7 @@ class CourseModelTestService {
     this.repo = new CourseModelTestRepository(db.CourseModelTest);
   }
 
-  async validate(course_id, model_test_id, subject_id) {
+  async validate(course_id, model_test_id, subject_id, topic_id) {
     const course = await db.Course.findByPk(course_id);
     if (!course) throw new Error("Course not found");
 
@@ -18,10 +18,21 @@ class CourseModelTestService {
       const subject = await db.Subject.findByPk(subject_id);
       if (!subject) throw new Error("Subject not found");
     }
+    if (topic_id) {
+      const topic = await db.Topic.findByPk(topic_id);
+      if (!topic) throw new Error("Topic not found");
+    }
   }
 
-  async add(course_id, model_test_id, name, duration_minutes, subject_id) {
-    await this.validate(course_id, model_test_id, subject_id);
+  async add(
+    course_id,
+    model_test_id,
+    name,
+    duration_minutes,
+    subject_id,
+    topic_id
+  ) {
+    await this.validate(course_id, model_test_id, subject_id, topic_id);
 
     const exists = await this.repo.exists(course_id, model_test_id);
     if (exists) {
@@ -34,6 +45,7 @@ class CourseModelTestService {
       name,
       duration_minutes: duration_minutes || 60,
       subject_id: subject_id || null,
+      topic_id: topic_id || null,
     });
   }
 
@@ -41,7 +53,7 @@ class CourseModelTestService {
     const records = [];
 
     for (const t of tests) {
-      await this.validate(course_id, t.model_test_id, t.subject_id);
+      await this.validate(course_id, t.model_test_id, t.subject_id, t.topic_id);
 
       const exists = await this.repo.exists(course_id, t.model_test_id);
       if (exists) continue;
@@ -52,6 +64,7 @@ class CourseModelTestService {
         name: t.name,
         duration_minutes: t.duration_minutes || 60,
         subject_id: t.subject_id || null,
+        topic_id: t.topic_id || null,
       });
     }
 

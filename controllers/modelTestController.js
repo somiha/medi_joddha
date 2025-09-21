@@ -13,8 +13,15 @@ class ModelTestController {
 
   async create(req, res) {
     try {
-      const { title, year, subject_id, type_id, is_published, is_archived } =
-        req.body;
+      const {
+        title,
+        year,
+        subject_id,
+        type_id,
+
+        is_published,
+        is_archived,
+      } = req.body;
 
       if (!title || !year || !type_id) {
         return res.status(400).json({
@@ -24,6 +31,7 @@ class ModelTestController {
 
       const data = { title, year, type_id };
       if (subject_id) data.subject_id = subject_id;
+
       if (is_published !== undefined) data.is_published = is_published;
       if (is_archived !== undefined) data.is_archived = is_archived;
 

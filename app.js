@@ -33,6 +33,11 @@ const examMakerRoutes = require("./routes/examMakerRoutes");
 const admissionProcessRoutes = require("./routes/admissionProcessRoutes");
 const admissionNoticeRoutes = require("./routes/admissionNoticeRoutes");
 const medicalCollegeRoutes = require("./routes/medicalCollegeRoutes");
+const bookRefRoutes = require("./routes/bookRefRoutes");
+const mnemonicRoutes = require("./routes/mnemonicRoutes");
+const bannerRoutes = require("./routes/bannerRoutes");
+
+const flashcardRoutes = require("./routes/flashcardRoutes");
 
 const adminAuthRoutes = require("./routes/adminAuthRoutes");
 
@@ -71,6 +76,10 @@ app.use("/api/exam-maker", examMakerRoutes);
 app.use("/api/admission-processes", admissionProcessRoutes);
 app.use("/api/admission-notices", admissionNoticeRoutes);
 app.use("/api/medical-colleges", medicalCollegeRoutes);
+app.use("/api/book-refs", bookRefRoutes);
+app.use("/api/flashcards", flashcardRoutes);
+app.use("/api/mnemonics", mnemonicRoutes);
+app.use("/api/banners", bannerRoutes);
 
 app.use("/api/admin/auth", adminAuthRoutes);
 

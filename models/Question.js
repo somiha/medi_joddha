@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       chapter_id: DataTypes.INTEGER,
       topic_id: DataTypes.INTEGER,
+      book_ref_id: DataTypes.INTEGER,
       question: {
         type: DataTypes.STRING,
         allowNull: false,

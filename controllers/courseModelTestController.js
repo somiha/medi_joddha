@@ -12,8 +12,14 @@ class CourseModelTestController {
 
   async add(req, res) {
     try {
-      const { course_id, model_test_id, name, duration_minutes, subject_id } =
-        req.body;
+      const {
+        course_id,
+        model_test_id,
+        name,
+        duration_minutes,
+        subject_id,
+        topic_id,
+      } = req.body;
 
       if (!course_id || !model_test_id) {
         return res.status(400).json({
@@ -26,7 +32,8 @@ class CourseModelTestController {
         model_test_id,
         name,
         duration_minutes,
-        subject_id
+        subject_id,
+        topic_id
       );
 
       res.status(201).json({

@@ -8,6 +8,7 @@ class AuthController {
     this.register = this.register.bind(this);
     this.login = this.login.bind(this);
     this.getUserProfile = this.getUserProfile.bind(this);
+    this.updateProfile = this.updateProfile.bind(this);
   }
 
   async register(req, res) {
@@ -136,6 +137,55 @@ class AuthController {
       await authService.resetPassword(user_id, new_password);
 
       res.json({ message: "Password reset successfully" });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  async updateProfile(req, res) {
+    try {
+      const id = req.user.id;
+      console.log(req.body);
+      const {
+        full_name,
+        institution_type,
+        institution_name,
+        class: className,
+        year,
+        admission_type,
+        mobile_number,
+        email,
+        is_draft,
+        is_published,
+      } = req.body;
+
+      // Build data object only with provided fields
+      const data = {};
+      if (full_name) data.full_name = full_name;
+      if (institution_type) data.institution_type = institution_type;
+      if (institution_name) data.institution_name = institution_name;
+      if (className) data.class = className;
+      if (year) data.year = parseInt(year);
+      if (admission_type) data.admission_type = admission_type;
+      if (mobile_number) data.mobile_number = mobile_number;
+      if (email) data.email = email;
+      if (is_draft !== undefined) data.is_draft = is_draft === "true";
+      if (is_published !== undefined)
+        data.is_published = is_published === "true";
+
+      // Image handling
+      if (req.file) {
+        const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+        data.image = `${baseUrl}/uploads/profile/${req.file.filename}`;
+      }
+
+      // Call service
+      const user = await this.authService.updateProfile(id, data, req.file);
+
+      res.json({
+        message: "Profile updated successfully",
+        user,
+      });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

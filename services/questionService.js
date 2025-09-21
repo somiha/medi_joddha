@@ -29,13 +29,21 @@ class QuestionService {
     const limit = parseInt(query.limit) || 10;
     const offset = (page - 1) * limit;
 
-    const { subject_id, chapter_id, topic_id, is_draft, is_published, search } =
-      query;
+    const {
+      subject_id,
+      chapter_id,
+      topic_id,
+      book_ref_id,
+      is_draft,
+      is_published,
+      search,
+    } = query;
     const where = {};
 
     if (subject_id) where.subject_id = subject_id;
     if (chapter_id) where.chapter_id = chapter_id;
     if (topic_id) where.topic_id = topic_id;
+    if (book_ref_id) where.book_ref_id = book_ref_id;
     if (is_draft !== undefined) where.is_draft = is_draft === "true";
     if (is_published !== undefined)
       where.is_published = is_published === "true";
@@ -69,6 +77,13 @@ class QuestionService {
   async getBySubjectChapterTopic(subjectId, chapterId, topicId, query) {
     return await this._getByFilter(
       { subject_id: subjectId, chapter_id: chapterId, topic_id: topicId },
+      query
+    );
+  }
+
+  async getByTopicBookRef(topicId, bookRefId, query) {
+    return await this._getByFilter(
+      { topic_id: topicId, book_ref_id: bookRefId },
       query
     );
   }

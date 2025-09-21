@@ -1,36 +1,43 @@
-// models/DoubtClearQuestion.js
+// models/Mnemonic.js
 module.exports = (sequelize, DataTypes) => {
-  const PremiumProgramUser = sequelize.define(
-    "PremiumProgramUser",
+  const Mnemonic = sequelize.define(
+    "Mnemonic",
     {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      userId: {
+      subject_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      programId: {
+      chapter_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      isActive: {
+      topic_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      is_published: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
-
-      note: {
+      image: {
         type: DataTypes.STRING,
         allowNull: true,
       },
     },
     {
-      tableName: "premium_program_users",
+      tableName: "mnemonics",
       timestamps: true,
     }
   );
 
-  return PremiumProgramUser;
+  return Mnemonic;
 };

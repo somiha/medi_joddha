@@ -2,6 +2,8 @@
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 
+const upload = require("../middleware/upload");
+
 const AuthService = require("../services/authService");
 const AuthController = require("../controllers/authController");
 
@@ -52,5 +54,11 @@ router.get("/profile", auth, authController.getUserProfile);
 router.post("/forgot/otp", AuthController.forgotPasswordSendOtp);
 router.post("/forgot/verify", AuthController.forgotPasswordVerifyOtp);
 router.post("/reset", AuthController.resetPassword);
+router.put(
+  "/profile",
+  upload.single("image"),
+  auth,
+  authController.updateProfile
+);
 
 module.exports = router;

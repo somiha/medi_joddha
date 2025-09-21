@@ -87,6 +87,17 @@ class AuthService {
     }
     return user;
   }
+
+  async updateProfile(userId, data, file) {
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new Error("User not found");
+
+    if (file && user.image) {
+      await deleteImage(user.image); // assuming deleteImage helper exists
+    }
+
+    return await user.update(data);
+  }
 }
 
 module.exports = AuthService;

@@ -1,3 +1,5 @@
+const { get } = require("../app");
+
 // controllers/questionController.js
 class QuestionController {
   constructor(questionService) {
@@ -11,6 +13,7 @@ class QuestionController {
     this.getBySubject = this.getBySubject.bind(this);
     this.getBySubjectAndChapter = this.getBySubjectAndChapter.bind(this);
     this.getBySubjectChapterTopic = this.getBySubjectChapterTopic.bind(this);
+    this.getByTopicBookRef = this.getByTopicBookRef.bind(this);
   }
 
   async create(req, res) {
@@ -19,6 +22,7 @@ class QuestionController {
         subject_id,
         chapter_id,
         topic_id,
+        book_ref_id,
         question,
         answer,
         des,
@@ -31,7 +35,15 @@ class QuestionController {
         option5,
       } = req.body;
 
-      const data = { subject_id, chapter_id, topic_id, question, answer, des };
+      const data = {
+        subject_id,
+        chapter_id,
+        topic_id,
+        book_ref_id,
+        question,
+        answer,
+        des,
+      };
       if (option1) data.option1 = option1;
       if (option2) data.option2 = option2;
       if (option3) data.option3 = option3;
@@ -103,6 +115,7 @@ class QuestionController {
         subject_id,
         chapter_id,
         topic_id,
+        book_ref_id,
         question,
         answer,
         des,
@@ -119,6 +132,7 @@ class QuestionController {
       if (subject_id) data.subject_id = subject_id;
       if (chapter_id) data.chapter_id = chapter_id;
       if (topic_id) data.topic_id = topic_id;
+      if (book_ref_id) data.book_ref_id = book_ref_id;
       if (question) data.question = question;
       if (answer) data.answer = answer;
       if (des) data.des = des;
@@ -240,6 +254,41 @@ class QuestionController {
       if (result.rows.length === 0) {
         return res.status(404).json({
           error: "No questions found for this subject, chapter, and topic",
+        });
+      }
+
+      res.json({
+        questions: result.rows,
+        pagination: {
+          currentPage: parseInt(req.query.page) || 1,
+          totalPages: Math.ceil(
+            result.count / (parseInt(req.query.limit) || 10)
+          ),
+          totalItems: result.count,
+          hasNext:
+            (parseInt(req.query.page) || 1) *
+              (parseInt(req.query.limit) || 10) <
+            result.count,
+          hasPrev: (parseInt(req.query.page) || 1) > 1,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getByTopicBookRef(req, res) {
+    try {
+      const { topicId, bookRefId } = req.params;
+      const result = await this.questionService.getByTopicBookRef(
+        topicId,
+        bookRefId,
+        req.query
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          error: "No questions found for this topic and book reference",
         });
       }
 

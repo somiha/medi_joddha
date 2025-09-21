@@ -27,4 +27,9 @@ router.get(
   questionController.getBySubjectChapterTopic
 );
 
+router.get(
+  "/topic/:topicId/bookRef/:bookRefId",
+  questionController.getByTopicBookRef
+);
+
 module.exports = router;
