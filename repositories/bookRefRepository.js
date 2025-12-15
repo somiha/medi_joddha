@@ -13,7 +13,7 @@ class BookRefRepository {
       where,
       offset,
       limit,
-      order: [["id", "DESC"]],
+      order: [["id", "ASC"]],
     });
   }
 

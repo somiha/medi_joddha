@@ -9,6 +9,9 @@ class LiveTestResultController {
     this.getById = this.getById.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
+
+    this.getTodaysTests = this.getTodaysTests.bind(this);
+    this.getRankingByTestId = this.getRankingByTestId.bind(this);
   }
 
   async add(req, res) {
@@ -102,6 +105,27 @@ class LiveTestResultController {
       res.json({ message: "Live test submission deleted" });
     } catch (error) {
       res.status(400).json({ error: error.message });
+    }
+  }
+
+  async getTodaysTests(req, res) {
+    try {
+      console.log("Fetching today's tests");
+      const tests = await this.service.getTodaysTests();
+      res.json({ tests });
+    } catch (error) {
+      console.error("Error fetching today's tests:", error);
+      res.status(500).json({ error: "Failed to fetch today's tests" });
+    }
+  }
+
+  async getRankingByTestId(req, res) {
+    try {
+      const { test_id } = req.params;
+      const ranking = await this.service.getRankingByTestId(parseInt(test_id));
+      res.json({ ranking });
+    } catch (error) {
+      res.status(404).json({ error: error.message });
     }
   }
 }

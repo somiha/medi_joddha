@@ -19,6 +19,7 @@ class CourseModelTestController {
         duration_minutes,
         subject_id,
         topic_id,
+        chapter_id,
       } = req.body;
 
       if (!course_id || !model_test_id) {
@@ -33,7 +34,8 @@ class CourseModelTestController {
         name,
         duration_minutes,
         subject_id,
-        topic_id
+        topic_id,
+        chapter_id
       );
 
       res.status(201).json({

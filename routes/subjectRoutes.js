@@ -11,10 +11,10 @@ const subjectController = new SubjectController(subjectService);
 const router = express.Router();
 const auth = require("../middleware/auth");
 
-router.post("/", upload.single("image"), subjectController.create);
+router.post("/", upload.uploadImage, subjectController.create);
 router.get("/", subjectController.getAll);
 router.get("/:id", subjectController.getById);
-router.put("/:id", upload.single("image"), subjectController.update);
+router.put("/:id", upload.uploadImage, subjectController.update);
 router.delete("/:id", subjectController.delete);
 
 module.exports = router;

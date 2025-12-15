@@ -9,6 +9,10 @@ const controller = new LiveTestResultController(service);
 
 const router = express.Router();
 
+router.get("/today", controller.getTodaysTests);
+
+router.get("/ranking/:test_id", controller.getRankingByTestId);
+
 router.post("/", controller.add);
 router.get("/user/:user_id", controller.getByUserId);
 router.get("/test/:test_id", controller.getByTestId);

@@ -80,12 +80,14 @@ class ProgramController {
       const { name, title, short_des, is_draft, is_published } = req.body;
       const data = {};
 
+      console.log("is_published", is_published);
+      console.log("is_draft", is_draft);
+
       if (name) data.name = name;
       if (title) data.title = title;
       if (short_des) data.short_des = short_des;
-      if (is_draft !== undefined) data.is_draft = is_draft === "true";
-      if (is_published !== undefined)
-        data.is_published = is_published === "true";
+      if (is_draft !== undefined) data.is_draft = is_draft === true;
+      if (is_published !== undefined) data.is_published = is_published === true;
 
       if (req.file) {
         const baseUrl = process.env.BASE_URL || "http://localhost:5000";

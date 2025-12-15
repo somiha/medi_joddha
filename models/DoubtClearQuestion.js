@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      question_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       question: {
         type: DataTypes.STRING,
         allowNull: false,

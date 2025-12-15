@@ -87,6 +87,9 @@ class CourseModelTestService {
         mt.is_published,
         mt.is_archived,
         mt.type_id,
+        mt.start_time,
+        mt.end_time,
+        mt.total_rankings,
         tt.name AS type_name
       FROM course_model_tests cmt
       LEFT JOIN model_tests mt ON cmt.model_test_id = mt.id
@@ -122,6 +125,9 @@ class CourseModelTestService {
         mt.title,
         mt.year,
         mt.is_published,
+         mt.start_time,
+        mt.end_time,
+        mt.total_rankings,
         c.name AS course_name,
         c.title AS course_title,
         p.name AS program_name

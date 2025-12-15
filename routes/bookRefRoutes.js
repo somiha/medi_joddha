@@ -11,7 +11,7 @@ const controller = new BookRefController(service);
 const router = express.Router();
 
 // Add with optional image
-router.post("/", upload.single("image"), controller.add);
+router.post("/", upload.uploadImage, controller.add);
 
 // Get all with pagination
 router.get("/", controller.getAll);
@@ -23,7 +23,7 @@ router.get("/:id", controller.getById);
 router.get("/subject/:subject_id", controller.getBySubjectId);
 
 // Update
-router.put("/:id", upload.single("image"), controller.update);
+router.put("/:id", upload.uploadImage, controller.update);
 
 // Delete
 router.delete("/:id", controller.delete);

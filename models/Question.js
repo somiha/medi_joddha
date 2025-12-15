@@ -19,11 +19,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      question_image: DataTypes.STRING,
       answer: {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      answer_image: DataTypes.STRING,
       des: DataTypes.TEXT,
+      des_image: DataTypes.STRING,
       is_draft: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
@@ -38,6 +41,12 @@ module.exports = (sequelize, DataTypes) => {
       option3: DataTypes.STRING,
       option4: DataTypes.STRING,
       option5: DataTypes.STRING,
+
+      option1_image: DataTypes.STRING,
+      option2_image: DataTypes.STRING,
+      option3_image: DataTypes.STRING,
+      option4_image: DataTypes.STRING,
+      option5_image: DataTypes.STRING,
     },
     {
       tableName: "questions",

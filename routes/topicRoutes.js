@@ -10,10 +10,10 @@ const topicController = new TopicController(topicService);
 const router = express.Router();
 const auth = require("../middleware/auth");
 
-router.post("/", upload.single("image"), topicController.create);
+router.post("/", upload.uploadImage, topicController.create);
 router.get("/", topicController.getAll);
 router.get("/:id", topicController.getById);
-router.put("/:id", upload.single("image"), topicController.update);
+router.put("/:id", upload.uploadImage, topicController.update);
 router.delete("/:id", topicController.delete);
 
 module.exports = router;

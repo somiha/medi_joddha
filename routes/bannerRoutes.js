@@ -11,7 +11,7 @@ const controller = new BannerController(service);
 const router = express.Router();
 
 // Create banner
-router.post("/", upload.single("image"), controller.create);
+router.post("/", upload.uploadImage, controller.create);
 
 // Get all banners (with pagination)
 router.get("/", controller.getAll);

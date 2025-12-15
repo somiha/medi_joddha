@@ -41,6 +41,15 @@ const flashcardRoutes = require("./routes/flashcardRoutes");
 
 const adminAuthRoutes = require("./routes/adminAuthRoutes");
 
+const policyInfoRoutes = require("./routes/policyInfoRoutes");
+const socialMediaRoutes = require("./routes/socialMediaRoutes");
+const contactUsRoutes = require("./routes/contactUsRoutes");
+const videoLectureRoutes = require("./routes/videoLectureRoutes");
+const appGuidelineRoutes = require("./routes/appGuidelineRoutes");
+const examHistoryRoutes = require("./routes/examHistoryRoutes");
+const questionReportRoutes = require("./routes/questionReportRoutes");
+const questionFavoriteRoutes = require("./routes/questionFavoriteRoutes");
+
 const app = express();
 
 app.use(cors());
@@ -80,6 +89,14 @@ app.use("/api/book-refs", bookRefRoutes);
 app.use("/api/flashcards", flashcardRoutes);
 app.use("/api/mnemonics", mnemonicRoutes);
 app.use("/api/banners", bannerRoutes);
+app.use("/api/policy-info", policyInfoRoutes);
+app.use("/api/social-media", socialMediaRoutes);
+app.use("/api/contact-us", contactUsRoutes);
+app.use("/api/video-lectures", videoLectureRoutes);
+app.use("/api/app-guidelines", appGuidelineRoutes);
+app.use("/api/exam-histories", examHistoryRoutes);
+app.use("/api/question-reports", questionReportRoutes);
+app.use("/api/question-favorites", questionFavoriteRoutes);
 
 app.use("/api/admin/auth", adminAuthRoutes);
 

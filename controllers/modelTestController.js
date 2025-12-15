@@ -18,7 +18,9 @@ class ModelTestController {
         year,
         subject_id,
         type_id,
-
+        start_time,
+        end_time,
+        total_rankings,
         is_published,
         is_archived,
       } = req.body;
@@ -34,6 +36,9 @@ class ModelTestController {
 
       if (is_published !== undefined) data.is_published = is_published;
       if (is_archived !== undefined) data.is_archived = is_archived;
+      if (start_time) data.start_time = start_time;
+      if (end_time) data.end_time = end_time;
+      if (total_rankings) data.total_rankings = total_rankings;
 
       const test = await this.service.create(data);
 
@@ -93,8 +98,17 @@ class ModelTestController {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const { title, year, subject_id, type_id, is_published, is_archived } =
-        req.body;
+      const {
+        title,
+        year,
+        subject_id,
+        type_id,
+        is_published,
+        is_archived,
+        start_time,
+        end_time,
+        total_rankings,
+      } = req.body;
 
       const data = {};
       if (title) data.title = title;
@@ -103,6 +117,9 @@ class ModelTestController {
       if (type_id !== undefined) data.type_id = type_id;
       if (is_published !== undefined) data.is_published = is_published;
       if (is_archived !== undefined) data.is_archived = is_archived;
+      if (start_time) data.start_time = start_time;
+      if (end_time) data.end_time = end_time;
+      if (total_rankings) data.total_rankings = total_rankings;
 
       const test = await this.service.update(id, data);
 

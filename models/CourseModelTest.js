@@ -26,6 +26,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         comment: "Optional: Subject this test is associated with in the course",
       },
+      chapter_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        comment: "Optional: Subject this test is associated with in the course",
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: true,

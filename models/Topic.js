@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      serial_id: {
+        type: DataTypes.INTEGER,
+      },
       image: DataTypes.STRING,
     },
     {

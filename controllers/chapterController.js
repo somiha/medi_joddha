@@ -12,9 +12,16 @@ class ChapterController {
 
   async create(req, res) {
     try {
-      const { subject_id, name, title, short_des, is_draft, is_published } =
-        req.body;
-      const data = { subject_id, name, title, short_des };
+      const {
+        subject_id,
+        name,
+        title,
+        short_des,
+        is_draft,
+        is_published,
+        serial_id,
+      } = req.body;
+      const data = { subject_id, name, title, short_des, serial_id };
 
       if (is_draft !== undefined) data.is_draft = is_draft === "true";
       if (is_published !== undefined)
@@ -78,17 +85,24 @@ class ChapterController {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const { subject_id, name, title, short_des, is_draft, is_published } =
-        req.body;
+      const {
+        subject_id,
+        name,
+        title,
+        short_des,
+        is_draft,
+        is_published,
+        serial_id,
+      } = req.body;
       const data = {};
 
       if (subject_id) data.subject_id = subject_id;
+      if (serial_id) data.serial_id = serial_id;
       if (name) data.name = name;
       if (title) data.title = title;
       if (short_des) data.short_des = short_des;
-      if (is_draft !== undefined) data.is_draft = is_draft === "true";
-      if (is_published !== undefined)
-        data.is_published = is_published === "true";
+      if (is_draft !== undefined) data.is_draft = is_draft === true;
+      if (is_published !== undefined) data.is_published = is_published === true;
 
       if (req.file) {
         const baseUrl = process.env.BASE_URL || "http://localhost:5000";

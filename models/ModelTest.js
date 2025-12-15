@@ -32,6 +32,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
+
+      start_time: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        comment: "Scheduled start time for the test",
+      },
+      end_time: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        comment: "Scheduled end time for the test",
+      },
+      total_rankings: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
     },
     {
       tableName: "model_tests",

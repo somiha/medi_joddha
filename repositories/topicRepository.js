@@ -12,7 +12,7 @@ class TopicRepository {
       where,
       offset,
       limit,
-      order: [["id", "DESC"]],
+      order: [["serial_id", "ASC"]],
     });
   }
 

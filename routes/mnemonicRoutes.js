@@ -10,12 +10,12 @@ const controller = new MnemonicController(service);
 
 const router = express.Router();
 
-router.post("/", upload.single("image"), controller.create);
+router.post("/", upload.uploadImage, controller.create);
 router.get("/subject/:subject_id", controller.getBySubjectId);
 router.get("/chapter/:chapter_id", controller.getByChapterId);
 router.get("/topic/:topic_id", controller.getByTopicId);
 router.get("/:id", controller.getById);
-router.put("/:id", upload.single("image"), controller.update);
+router.put("/:id", upload.uploadImage, controller.update);
 router.delete("/:id", controller.delete);
 
 module.exports = router;

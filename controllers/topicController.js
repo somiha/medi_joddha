@@ -11,9 +11,16 @@ class TopicController {
 
   async create(req, res) {
     try {
-      const { chapter_id, name, title, short_des, is_draft, is_published } =
-        req.body;
-      const data = { chapter_id, name, title, short_des };
+      const {
+        chapter_id,
+        name,
+        title,
+        short_des,
+        is_draft,
+        is_published,
+        serial_id,
+      } = req.body;
+      const data = { chapter_id, name, title, short_des, serial_id };
 
       if (is_draft !== undefined) data.is_draft = is_draft === "true";
       if (is_published !== undefined)
@@ -77,11 +84,19 @@ class TopicController {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const { chapter_id, name, title, short_des, is_draft, is_published } =
-        req.body;
+      const {
+        chapter_id,
+        name,
+        title,
+        short_des,
+        is_draft,
+        is_published,
+        serial_id,
+      } = req.body;
       const data = {};
 
       if (chapter_id) data.chapter_id = chapter_id;
+      if (serial_id) data.serial_id = serial_id;
       if (name) data.name = name;
       if (title) data.title = title;
       if (short_des) data.short_des = short_des;

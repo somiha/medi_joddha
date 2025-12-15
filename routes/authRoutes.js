@@ -54,11 +54,6 @@ router.get("/profile", auth, authController.getUserProfile);
 router.post("/forgot/otp", AuthController.forgotPasswordSendOtp);
 router.post("/forgot/verify", AuthController.forgotPasswordVerifyOtp);
 router.post("/reset", AuthController.resetPassword);
-router.put(
-  "/profile",
-  upload.single("image"),
-  auth,
-  authController.updateProfile
-);
+router.put("/profile", upload.uploadImage, auth, authController.updateProfile);
 
 module.exports = router;

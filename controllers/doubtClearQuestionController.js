@@ -13,7 +13,7 @@ class DoubtClearQuestionController {
 
   async add(req, res) {
     try {
-      const { name, question, programId, userId } = req.body;
+      const { name, question, programId, userId, questionId } = req.body;
 
       if (!name || !question) {
         return res
@@ -21,7 +21,7 @@ class DoubtClearQuestionController {
           .json({ error: "Name and question are required" });
       }
 
-      const data = { name, question, programId, userId };
+      const data = { name, question, programId, userId, questionId };
       if (req.file) {
         const baseUrl = process.env.BASE_URL || "http://localhost:5000";
         data.image = `${baseUrl}/uploads/${req.file.filename}`;

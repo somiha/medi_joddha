@@ -11,10 +11,10 @@ const courseController = new CourseController(courseService);
 const router = express.Router();
 const auth = require("../middleware/auth");
 
-router.post("/", upload.single("image"), courseController.create);
+router.post("/", upload.uploadImage, courseController.create);
 router.get("/", courseController.getAll);
 router.get("/:id", courseController.getById);
-router.put("/:id", upload.single("image"), courseController.update);
+router.put("/:id", upload.uploadImage, courseController.update);
 router.delete("/:id", courseController.delete);
 
 module.exports = router;

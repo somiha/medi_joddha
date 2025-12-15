@@ -12,10 +12,10 @@ const auth = require("../middleware/auth");
 
 const router = express.Router();
 
-router.post("/", auth, upload.single("image"), controller.add);
+router.post("/", auth, upload.uploadImage, controller.add);
 router.get("/", auth, controller.getAll);
 router.get("/question/:questionId", auth, controller.getByQuestion);
-router.put("/:id", auth, upload.single("image"), controller.update);
+router.put("/:id", auth, upload.uploadImage, controller.update);
 router.delete("/:id", auth, controller.delete);
 
 module.exports = router;

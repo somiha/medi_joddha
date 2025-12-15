@@ -13,7 +13,7 @@ class SubjectRepository {
       where,
       offset,
       limit,
-      order: [["id", "DESC"]],
+      order: [["id", "ASC"]],
     });
   }
 

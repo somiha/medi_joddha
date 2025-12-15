@@ -10,7 +10,7 @@ const controller = new AdmissionProcessController(service);
 
 const router = express.Router();
 
-router.post("/", upload.single("image"), controller.add);
+router.post("/", upload.uploadImage, controller.add);
 router.get("/", controller.getAll);
 router.get("/:id", controller.getById);
 router.put("/:id", controller.update);

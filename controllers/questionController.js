@@ -1,6 +1,6 @@
-const { get } = require("../app");
-
 // controllers/questionController.js
+const { uploadImage } = require("../middleware/upload");
+
 class QuestionController {
   constructor(questionService) {
     this.questionService = questionService;
@@ -14,6 +14,7 @@ class QuestionController {
     this.getBySubjectAndChapter = this.getBySubjectAndChapter.bind(this);
     this.getBySubjectChapterTopic = this.getBySubjectChapterTopic.bind(this);
     this.getByTopicBookRef = this.getByTopicBookRef.bind(this);
+    this.getRandomQuestions = this.getRandomQuestions.bind(this);
   }
 
   async create(req, res) {
@@ -43,21 +44,48 @@ class QuestionController {
         question,
         answer,
         des,
+        option1,
+        option2,
+        option3,
+        option4,
+        option5,
       };
-      if (option1) data.option1 = option1;
-      if (option2) data.option2 = option2;
-      if (option3) data.option3 = option3;
-      if (option4) data.option4 = option4;
-      if (option5) data.option5 = option5;
+
       if (is_draft !== undefined) data.is_draft = is_draft === "true";
       if (is_published !== undefined)
         data.is_published = is_published === "true";
 
-      if (req.file) {
-        const baseUrl = process.env.BASE_URL || "http://localhost:5000";
-        data.image = `${baseUrl}/uploads/${req.file.filename}`;
+      // ✅ Handle multiple uploaded files
+      const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+
+      if (req.files && Array.isArray(req.files)) {
+        const folder = req.body.uploadFolder || "questions";
+
+        // Map form field names to database fields
+        const imageFieldMap = {
+          question_image: "question_image",
+          answer_image: "answer_image",
+          des_image: "des_image",
+          option1_image: "option1_image",
+          option2_image: "option2_image",
+          option3_image: "option3_image",
+          option4_image: "option4_image",
+          option5_image: "option5_image",
+        };
+
+        req.files.forEach((file) => {
+          const fieldName = file.fieldname; // e.g., 'question_image'
+          const dbField = imageFieldMap[fieldName];
+
+          if (dbField) {
+            const filename = `${folder}/${file.filename}`;
+            const imagePath = `${baseUrl}/uploads/${filename}`;
+            data[dbField] = imagePath;
+          }
+        });
       }
 
+      console.log("Data to create:", data);
       const questionObj = await this.questionService.create(data);
 
       res.status(201).json({
@@ -65,6 +93,7 @@ class QuestionController {
         question: questionObj,
       });
     } catch (error) {
+      console.error("Error creating question:", error);
       res.status(400).json({ error: error.message });
     }
   }
@@ -145,9 +174,31 @@ class QuestionController {
       if (is_published !== undefined)
         data.is_published = is_published === "true";
 
-      if (req.file) {
-        const baseUrl = process.env.BASE_URL || "http://localhost:5000";
-        data.image = `${baseUrl}/uploads/${req.file.filename}`;
+      const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+
+      // ✅ Handle multiple image uploads
+      if (req.files && Array.isArray(req.files)) {
+        const folder = req.body.uploadFolder || "questions";
+
+        const imageFieldMap = {
+          question_image: "question_image",
+          answer_image: "answer_image",
+          des_image: "des_image",
+          option1_image: "option1_image",
+          option2_image: "option2_image",
+          option3_image: "option3_image",
+          option4_image: "option4_image",
+          option5_image: "option5_image",
+        };
+
+        req.files.forEach((file) => {
+          const dbField = imageFieldMap[file.fieldname];
+          if (dbField) {
+            const filename = `${folder}/${file.filename}`;
+            const imagePath = `${baseUrl}/uploads/${filename}`;
+            data[dbField] = imagePath;
+          }
+        });
       }
 
       const questionObj = await this.questionService.update(id, data);
@@ -165,7 +216,6 @@ class QuestionController {
     try {
       const { id } = req.params;
       await this.questionService.delete(id);
-
       res.json({ message: "Question deleted successfully" });
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -309,6 +359,55 @@ class QuestionController {
       });
     } catch (error) {
       res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getRandomQuestions(req, res) {
+    try {
+      const {
+        subject_id: subjectId,
+        chapter_id: chapterId,
+        topic_id: topicId,
+        is_board: isBoardStr,
+        total: totalStr,
+        board_id: boardId, // ✅ Added board_id
+      } = req.query;
+
+      console.log("Received parameters:", {
+        subjectId,
+        chapterId,
+        topicId,
+        isBoard: isBoardStr,
+        total: totalStr,
+        boardId, // ✅ Log boardId
+      });
+
+      console.log("Received query parameters:", req.query);
+
+      const isBoard = isBoardStr === "1" || isBoardStr === "true";
+      const total = totalStr;
+
+      const questions = await this.questionService.getRandomQuestions({
+        subjectId,
+        chapterId,
+        topicId,
+        isBoard,
+        total,
+        boardId, // ✅ Pass boardId
+      });
+
+      return res.json({
+        success: true,
+        count: questions.length,
+        questions,
+      });
+    } catch (error) {
+      console.error("Error fetching random questions:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to fetch questions",
+        error: error.message,
+      });
     }
   }
 }

@@ -45,6 +45,9 @@ class ModelTestRepository {
           mt.year,
           mt.is_archived,
           mt.subject_id,
+          mt.start_time,
+          mt.end_time,
+          mt.total_rankings,
           mt.created_at,
           mt.updated_at
         FROM model_tests mt
@@ -91,6 +94,9 @@ class ModelTestRepository {
           mt.year,
           mt.is_archived,
           mt.subject_id,
+          mt.start_time,
+          mt.end_time,
+          mt.total_rankings,
           mt.created_at,
           mt.updated_at
         FROM model_tests mt

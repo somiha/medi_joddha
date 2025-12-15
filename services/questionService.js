@@ -109,23 +109,90 @@ class QuestionService {
       if (!chapter) throw new Error("Chapter not found");
     }
 
-    if (data.image && question.image) {
-      await deleteImage(question.image);
+    // Collect old images for deletion
+    const oldImages = [];
+
+    // Map uploadField → image field
+    const imageFields = {
+      question_image: question.question_image,
+      answer_image: question.answer_image,
+      des_image: question.des_image,
+      option1_image: question.option1_image,
+      option2_image: question.option2_image,
+      option3_image: question.option3_image,
+      option4_image: question.option4_image,
+      option5_image: question.option5_image,
+    };
+
+    Object.entries(imageFields).forEach(([field, imgPath]) => {
+      if (data[field] && imgPath) {
+        oldImages.push(imgPath);
+      }
+    });
+
+    // Update
+    const updated = await question.update(data);
+
+    // Delete old images after update
+    for (const img of oldImages) {
+      await deleteImage(img);
     }
 
-    return await question.update(data);
+    return updated;
   }
 
   async delete(id) {
     const question = await this.questionRepository.findById(id);
     if (!question) throw new Error("Question not found");
 
-    if (question.image) {
-      await deleteImage(question.image);
+    // Delete all associated images
+    const images = [
+      question.question_image,
+      question.answer_image,
+      question.des_image,
+      question.option1_image,
+      question.option2_image,
+      question.option3_image,
+      question.option4_image,
+      question.option5_image,
+    ].filter(Boolean);
+
+    for (const img of images) {
+      await deleteImage(img);
     }
 
     await question.destroy();
     return question;
+  }
+
+  async getRandomQuestions({
+    subjectId,
+    chapterId,
+    topicId,
+    isBoard = false,
+    boardId,
+    total = 10,
+  }) {
+    const limit = Math.max(1, Math.min(parseInt(total) || 10, 100)); // Min 1, Max 100
+
+    if (isBoard) {
+      return await this.questionRepository.getBoardQuestions({
+        // ✅ Fixed
+        subjectId,
+        chapterId,
+        topicId,
+        boardId,
+        limit,
+      });
+    } else {
+      return await this.questionRepository.getRegularQuestions({
+        // ✅ Fixed
+        subjectId,
+        chapterId,
+        topicId,
+        limit,
+      });
+    }
   }
 }
 

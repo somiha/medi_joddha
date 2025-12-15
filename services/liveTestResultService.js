@@ -67,6 +67,25 @@ class LiveTestResultService {
     await record.destroy();
     return { message: "Live test submission deleted successfully" };
   }
+
+  async getTodaysTests() {
+    const todaysTest = await this.repo.getTodaysTests();
+    if (todaysTest.length === 0) {
+      throw new Error("No tests scheduled for today");
+    }
+    return todaysTest;
+  }
+
+  async getRankingByTestId(testId) {
+    if (!testId) throw new Error("Test ID is required");
+
+    const ranking = await this.repo.getRankingByTestId(testId);
+    if (ranking.length === 0) {
+      throw new Error("No results found for this test");
+    }
+
+    return ranking;
+  }
 }
 
 module.exports = LiveTestResultService;

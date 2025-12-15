@@ -11,10 +11,10 @@ const chapterController = new ChapterController(chapterService);
 const router = express.Router();
 const auth = require("../middleware/auth");
 
-router.post("/", upload.single("image"), chapterController.create);
+router.post("/", upload.uploadImage, chapterController.create);
 router.get("/", chapterController.getAll);
 router.get("/:id", chapterController.getById);
-router.put("/:id", upload.single("image"), chapterController.update);
+router.put("/:id", upload.uploadImage, chapterController.update);
 router.delete("/:id", chapterController.delete);
 
 module.exports = router;
